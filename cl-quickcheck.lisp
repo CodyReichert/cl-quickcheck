@@ -406,6 +406,20 @@ either passed *NUM-TRIALS* times or failed at least once."
                    `(defparameter ,fn
                       (lambda ,params ,@body))))))))
 
+
+(defvar alphabet-chars
+  '(#\A #\B #\C #\D #\E #\F #\G #\H #\I #\J #\K #\L #\M #\N #\O #\P
+    #\Q #\R #\S #\T #\U #\V #\W #\X #\Y #\Z #\a #\b #\c #\d #\e #\f
+    #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v
+    #\w #\x #\y #\z)
+  "Chars in the English alphabet.")
+
+(defun from-alphabet (chr)
+  "Returns chr if it's in the English alphabet - NIL otherwise."
+  (remove-if-not #'(lambda (x)
+                     (char= x chr)) alphabet-chars))
+
+
 (defun a-boolean ()
   (= 0 (random 2)))
 
@@ -439,9 +453,21 @@ either passed *NUM-TRIALS* times or failed at least once."
 (defun a-char ()
   (generate #'(lambda () (code-char (random 256)))))
 
+(defun an-alphabetic-char ()
+  "Returns a random char from the English alphabet."
+  (let ((idx (random 52)))
+    (elt alphabet-chars idx)))
+
 (defun a-string ()
   (coerce (loop repeat (random *size*)
                 collect (a-char))
+          'string))
+
+
+(defun an-alphabet-string ()
+  "Return a random string of English alphabet characters."
+  (coerce (loop repeat (random *size*)
+                collect (an-alphabetic-char))
           'string))
 
 (defun a-symbol ()
